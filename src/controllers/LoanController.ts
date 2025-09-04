@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { LoanService } from '../services/LoanService';
-import { validateLoanApplication } from '../utils/validation';
+import { validateLoanApplicationSafe } from '../utils/validation';
 
 export class LoanController {
   private loanService: LoanService;
@@ -12,7 +12,7 @@ export class LoanController {
   createLoan = async (req: Request, res: Response): Promise<void> => {
     try {
       // Validate request body
-      const validation = validateLoanApplication(req.body);
+      const validation = validateLoanApplicationSafe(req.body);
       
       if (!validation.isValid) {
         res.status(400).json({

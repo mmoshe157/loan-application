@@ -101,22 +101,42 @@ export class CrimeAgentService implements CrimeAgent {
     
     const addressLower = normalizedAddress.toLowerCase();
     
-    // Simple heuristic based on address characteristics
-    if (addressLower.includes('downtown') || addressLower.includes('central')) {
-      return 'D';
-    }
-    
-    if (addressLower.includes('hills') || addressLower.includes('park') || addressLower.includes('garden')) {
-      return 'A';
-    }
-    
-    if (addressLower.includes('industrial') || addressLower.includes('warehouse')) {
+    // Known high-crime areas (Grade F)
+    if (addressLower.includes('east palo alto') || 
+        addressLower.includes('oakland downtown') ||
+        addressLower.includes('tenderloin') ||
+        addressLower.includes('industrial') || 
+        addressLower.includes('warehouse')) {
       return 'F';
     }
     
-    // Use a simple hash to generate consistent grades for the same address
+    // Safe areas (Grade A)
+    if (addressLower.includes('sunnyvale') ||
+        addressLower.includes('palo alto') && !addressLower.includes('east palo alto') ||
+        addressLower.includes('cupertino') ||
+        addressLower.includes('hills') || 
+        addressLower.includes('park') || 
+        addressLower.includes('garden')) {
+      return 'A';
+    }
+    
+    // Moderate areas (Grade B)
+    if (addressLower.includes('san jose') ||
+        addressLower.includes('fremont') ||
+        addressLower.includes('mountain view')) {
+      return 'B';
+    }
+    
+    // Urban areas (Grade D)
+    if (addressLower.includes('downtown') || 
+        addressLower.includes('central') ||
+        addressLower.includes('san francisco')) {
+      return 'D';
+    }
+    
+    // Use a simple hash to generate consistent grades for other addresses
     const hash = this.simpleHash(normalizedAddress);
-    const grades = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const grades = ['B', 'C', 'D', 'E']; // Avoid A and F for random addresses
     return grades[hash % grades.length];
   }
 

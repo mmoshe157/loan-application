@@ -33,7 +33,7 @@ describe('EligibilityService', () => {
       const result = eligibilityService.evaluateEligibility(application, 'A');
 
       expect(result.eligible).toBe(false);
-      expect(result.reason).toBe('Credit score too low');
+      expect(result.reason).toBe('Credit score must be at least 700');
       expect(result.checks.creditScore).toBe(false);
       expect(result.checks.income).toBe(true);
       expect(result.checks.crimeGrade).toBe(true);
@@ -55,7 +55,7 @@ describe('EligibilityService', () => {
       const result = eligibilityService.evaluateEligibility(application, 'A');
 
       expect(result.eligible).toBe(false);
-      expect(result.reason).toBe('Monthly income too low');
+      expect(result.reason).toBe('Insufficient monthly income for requested loan amount');
       expect(result.checks.creditScore).toBe(true);
       expect(result.checks.income).toBe(false);
       expect(result.checks.crimeGrade).toBe(true);
@@ -76,7 +76,7 @@ describe('EligibilityService', () => {
       const result = eligibilityService.evaluateEligibility(baseApplication, 'F');
 
       expect(result.eligible).toBe(false);
-      expect(result.reason).toBe('Property location has high crime rate');
+      expect(result.reason).toBe('Property location has unacceptable crime grade (F)');
       expect(result.checks.creditScore).toBe(true);
       expect(result.checks.income).toBe(true);
       expect(result.checks.crimeGrade).toBe(false);
@@ -100,7 +100,7 @@ describe('EligibilityService', () => {
       const result = eligibilityService.evaluateEligibility(application, 'F');
 
       expect(result.eligible).toBe(false);
-      expect(result.reason).toBe('Credit score too low, Monthly income too low, Property location has high crime rate');
+      expect(result.reason).toBe('Credit score must be at least 700, Insufficient monthly income for requested loan amount, Property location has unacceptable crime grade (F)');
       expect(result.checks.creditScore).toBe(false);
       expect(result.checks.income).toBe(false);
       expect(result.checks.crimeGrade).toBe(false);

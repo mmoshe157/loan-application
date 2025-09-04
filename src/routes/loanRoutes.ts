@@ -21,3 +21,7 @@ router.post('/loan', authMiddleware.authenticate, loanController.createLoan.bind
 router.get('/loan/:id', authMiddleware.authenticate, loanController.getLoan.bind(loanController));
 
 export { router as loanRoutes };
+
+export function createRoutes(): Router {
+  return router;
+}

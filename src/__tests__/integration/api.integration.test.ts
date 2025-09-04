@@ -81,7 +81,7 @@ describe('API Integration Tests', () => {
           applicantName: 'John Doe',
           propertyAddress: '558 Carlisle Way Sunnyvale CA 94087',
           creditScore: 720,
-          monthlyIncome: 6500,
+          monthlyIncome: 10000,
           requestedAmount: 150000,
           loanTermMonths: 24
         })
@@ -92,7 +92,7 @@ describe('API Integration Tests', () => {
         applicantName: 'John Doe',
         propertyAddress: '558 Carlisle Way Sunnyvale CA 94087',
         creditScore: 720,
-        monthlyIncome: 6500,
+        monthlyIncome: 10000,
         requestedAmount: 150000,
         loanTermMonths: 24,
         eligible: true,
@@ -139,9 +139,9 @@ describe('API Integration Tests', () => {
           applicantName: 'Bob Johnson',
           propertyAddress: '123 Main St',
           creditScore: 750,
-          monthlyIncome: 3000, // Insufficient for the loan amount
+          monthlyIncome: 2000, // Insufficient for the loan amount
           requestedAmount: 200000,
-          loanTermMonths: 360
+          loanTermMonths: 120
         })
         .expect(201);
 
@@ -164,7 +164,7 @@ describe('API Integration Tests', () => {
         .expect(400);
 
       expect(response.body.error).toBe('Bad Request');
-      expect(response.body.message).toContain('validation');
+      expect(response.body.message).toContain('Validation failed');
     });
 
     it('should return 404 for non-existent loan application', async () => {

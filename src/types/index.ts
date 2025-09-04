@@ -22,14 +22,29 @@ export interface LoanApplicationRequest {
   loanTermMonths: number;
 }
 
+export interface LoanApplicationResponse {
+  id: string;
+  applicantName: string;
+  propertyAddress: string;
+  creditScore: number;
+  monthlyIncome: number;
+  requestedAmount: number;
+  loanTermMonths: number;
+  eligible: boolean;
+  reason: string;
+  crimeGrade: string;
+}
+
+export interface EligibilityChecks {
+  creditScore: boolean;
+  income: boolean;
+  crimeGrade: boolean;
+}
+
 export interface EligibilityResult {
   eligible: boolean;
   reason: string;
-  checks: {
-    creditScore: boolean;
-    income: boolean;
-    crimeGrade: boolean;
-  };
+  checks: EligibilityChecks;
 }
 
 export interface ErrorResponse {

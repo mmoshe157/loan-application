@@ -2,6 +2,8 @@ import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 import path from 'path';
 
+export { Database };
+
 let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 
 export async function initializeDatabase(): Promise<Database<sqlite3.Database, sqlite3.Statement>> {

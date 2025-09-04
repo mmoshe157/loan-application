@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import { json } from 'body-parser';
@@ -57,6 +60,17 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled error:', err);
+  
+  // Handle JSON parsing errors
+  if (err.type === 'entity.parse.failed') {
+    const error: ErrorResponse = {
+      error: 'Bad Request',
+      message: 'Invalid JSON format in request body',
+      statusCode: 400
+    };
+    res.status(400).json(error);
+    return;
+  }
   
   const error: ErrorResponse = {
     error: 'Internal Server Error',

@@ -19,6 +19,10 @@ export class LoanService {
     this.crimeAgentService = crimeAgentService;
   }
 
+  async createLoanApplication(request: LoanApplicationRequest): Promise<LoanApplication> {
+    return this.processLoanApplication(request);
+  }
+
   async processLoanApplication(request: LoanApplicationRequest): Promise<LoanApplication> {
     try {
       console.log(`Processing loan application for ${request.applicantName}`);
@@ -163,6 +167,38 @@ export class LoanService {
     } catch (error) {
       console.error('Error deleting loan application:', error);
       throw new Error(`Failed to delete loan application: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  // Test helper method
+  async processApplicationWithMockCrimeGrade(request: LoanApplicationRequest, mockCrimeGrade: string): Promise<LoanApplication> {
+    try {
+      console.log(`Processing loan application for ${request.applicantName} with mock crime grade: ${mockCrimeGrade}`);
+
+      // Step 1: Evaluate eligibility with mock crime grade
+      const eligibilityResult = this.eligibilityService.evaluateEligibility(request, mockCrimeGrade);
+
+      console.log(`Eligibility result: ${eligibilityResult.eligible ? 'APPROVED' : 'DENIED'} - ${eligibilityResult.reason}`);
+
+      // Step 2: Create loan application record
+      const loanApplication = await this.loanRepository.create({
+        applicantName: request.applicantName,
+        propertyAddress: request.propertyAddress,
+        creditScore: request.creditScore,
+        monthlyIncome: request.monthlyIncome,
+        requestedAmount: request.requestedAmount,
+        loanTermMonths: request.loanTermMonths,
+        eligible: eligibilityResult.eligible,
+        reason: eligibilityResult.reason,
+        crimeGrade: mockCrimeGrade
+      });
+
+      console.log(`Loan application created with ID: ${loanApplication.id}`);
+      return loanApplication;
+
+    } catch (error) {
+      console.error('Error processing loan application:', error);
+      throw new Error(`Failed to process loan application: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 }

@@ -1,5 +1,4 @@
-import { EligibilityResult, EligibilityChecks } from '../models/EligibilityResult';
-import { LoanApplicationRequest } from '../models/LoanApplication';
+import { EligibilityResult, EligibilityChecks, LoanApplicationRequest } from '../types';
 
 export class EligibilityService {
   private static readonly MIN_CREDIT_SCORE = 700;
@@ -45,15 +44,15 @@ export class EligibilityService {
     const failedChecks: string[] = [];
 
     if (!checks.creditScore) {
-      failedChecks.push('Credit score too low');
+      failedChecks.push('Credit score must be at least 700');
     }
 
     if (!checks.income) {
-      failedChecks.push('Monthly income too low');
+      failedChecks.push('Insufficient monthly income for requested loan amount');
     }
 
     if (!checks.crimeGrade) {
-      failedChecks.push('Property location has high crime rate');
+      failedChecks.push('Property location has unacceptable crime grade (F)');
     }
 
     return failedChecks.join(', ');
