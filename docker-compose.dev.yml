@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  loan-api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - API_KEY=dev-api-key-123
+      - DATABASE_URL=/app/data/database.sqlite
+      - CORS_ORIGIN=*
+    volumes:
+      # Mount source code for development
+      - .:/app
+      - /app/node_modules
+      # Persist database data
+      - loan_data_dev:/app/data
+    restart: unless-stopped
+    command: npm run dev
+
+volumes:
+  loan_data_dev:
+    driver: local
